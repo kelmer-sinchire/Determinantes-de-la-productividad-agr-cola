@@ -55,3 +55,11 @@ po/*~
 # RStudio Connect folder
 rsconnect/
 >>>>>>> 2b45df99c93cb946bbc79e0a9bcbf9ab4f7159da
+
+# Archivos locales y bases de datos pesadas
+.gitignore_backup
+BDDenemdu_personas_2025_anual.sav
+.Rhistory
+.Rproj.user/
+renv/library/
+renv/staging/
