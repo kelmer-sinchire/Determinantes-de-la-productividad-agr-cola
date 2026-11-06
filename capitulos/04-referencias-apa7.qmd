@@ -1,0 +1,27 @@
+{{< pagebreak >}}
+
+# Referencias
+
+::: {.references custom-style="References"}
+
+Anselin, L. (1988). *Spatial econometrics: Methods and models*. Kluwer Academic Publishers.
+
+Binswanger, H. P., Khandker, S. R., & Rosenzweig, M. R. (1993). How infrastructure and financial institutions affect agricultural output and investment in India. *Journal of Development Economics, 41*(2), 337–366.
+
+Fan, S., Hazell, P., & Thorat, S. (2000). Government spending, growth and poverty in rural India. *American Journal of Agricultural Economics, 82*(4), 1038–1051.
+
+Feder, G., Lau, L. J., Lin, J. Y., & Luo, X. (1990). The relationship between credit and productivity in Chinese agriculture: A microeconomic model of disequilibrium. *American Journal of Agricultural Economics, 72*(5), 1151–1157.
+
+Hussain, I., & Hanjra, M. A. (2004). Irrigation and poverty alleviation: Review of the empirical evidence. *Irrigation and Drainage, 53*(1), 1–15.
+
+Schultz, T. W. (1964). *Transforming traditional agriculture*. Yale University Press.
+
+Solow, R. M. (1956). A contribution to the theory of economic growth. *The Quarterly Journal of Economics, 70*(1), 65–94.
+
+Stiglitz, J. E., & Weiss, A. (1981). Credit rationing in markets with imperfect information. *The American Economic Review, 71*(3), 393–410.
+
+Tobler, W. R. (1970). A computer movie simulating urban growth in the Detroit region. *Economic Geography, 46*(sup1), 234–240.
+
+Wooldridge, J. M. (2010). *Econometric analysis of cross section and panel data* (2.ª ed.). MIT Press.
+
+:::

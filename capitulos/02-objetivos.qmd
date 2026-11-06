@@ -1,0 +1,22 @@
+# 2. Objetivos
+
+## 2.1. Objetivo descriptivo
+
+Describir el comportamiento de la productividad agrícola en las provincias del Ecuador y su relación con el riego, el crédito agrícola y la infraestructura vial, a fin de identificar cuál de estos factores se asocia en mayor medida con las diferencias entre provincias.
+
+### Objetivos específicos del componente descriptivo
+
+1. Describir la distribución provincial de la productividad agrícola (USD por hectárea) e identificar las provincias de mayor y menor desempeño.
+2. Caracterizar el acceso a riego, el crédito por hectárea y la red vial (total, arterial y colectora) en cada provincia.
+3. Describir las condiciones de pobreza rural y escolaridad que acompañan a la productividad en cada provincia.
+
+## 2.2. Objetivo de modelación
+
+Estimar un modelo econométrico que cuantifique el efecto del riego, el crédito agrícola y la infraestructura vial sobre la productividad agrícola provincial, controlando por la pobreza rural y la escolaridad rural, para determinar cuál de estos factores resulta más determinante.
+
+### Objetivos específicos del componente de modelación
+
+1. Especificar y estimar un modelo de regresión múltiple de la productividad agrícola (USD por hectárea) en función del porcentaje de superficie con riego, el crédito por hectárea y la densidad de la red vial, incorporando la pobreza y la escolaridad rural como variables de control.
+2. Comparar la magnitud relativa de los efectos de cada variable explicativa mediante coeficientes estandarizados, a fin de establecer su importancia en la explicación de la productividad.
+3. Contrastar el efecto diferenciado de las vías arteriales y las vías colectoras sobre la productividad.
+4. Evaluar la presencia de dependencia espacial entre provincias mediante el índice de Moran y verificar la robustez del modelo con pruebas de diagnóstico (multicolinealidad, heterocedasticidad y normalidad de los residuos).

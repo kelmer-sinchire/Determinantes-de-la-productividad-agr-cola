@@ -1,0 +1,210 @@
+---
+title: "Revisión de literatura"
+lang: es
+format:
+  html:
+    toc: false
+    number-sections: false
+    css: []
+  docx:
+    toc: false
+execute:
+  echo: false
+  warning: false
+---
+
+```{=html}
+<style>
+  /* Estilo tipo APA 7: Times New Roman 12 pt, tablas sin líneas verticales */
+  body { font-family: "Times New Roman", Times, serif; font-size: 12pt; line-height: 1.5; }
+  h1.title { text-align: center; font-weight: bold; font-size: 14pt; }
+  h2 { font-size: 12pt; font-weight: bold; text-align: left; }
+  p.tabla-num { font-weight: bold; margin-bottom: 0; margin-top: 1.5em; }
+  p.tabla-titulo { font-style: italic; margin-top: 0; }
+  table { border-collapse: collapse; border-top: 1px solid #000; border-bottom: 1px solid #000; width: 100%; }
+  thead { border-bottom: 1px solid #000; }
+  th, td { border: none !important; padding: 4px 8px; vertical-align: top; text-align: left; }
+  /* Sangría francesa en la columna de referencias */
+  td:nth-child(2) { padding-left: 2.5em; text-indent: -2em; }
+</style>
+```
+
+<!--
+NOTAS DE REVISIÓN (no se muestran en el documento final):
+- Entradas 7 y 20, 17 y 23, 15 y 21, 36 y 37 están duplicadas (misma fuente).
+- Entrada 12: "Zhou et al." está incompleta; APA 7 pide listar los autores (hasta 20).
+- Entrada 14: falta el nombre de la revista.
+- Entrada 10: falta el DOI.
+- Entradas 30 y 4: informes; verificar si corresponde incluir URL.
+- Entradas sin autor: en APA 7 el título pasa a la posición del autor.
+-->
+
+## Productividad agrícola y brechas entre territorios
+
+::: {.tabla-num}
+Tabla 1
+:::
+
+::: {.tabla-titulo}
+Literatura sobre productividad agrícola y brechas entre territorios
+:::
+
+| N.º | Referencia bibliográfica | Aporte a la investigación |
+|:---|:--------------------------------------------|:--------------------------|
+| 1 | Omotilewa, O. J., Jayne, T. S., Muyanga, M., Aromolaran, A. B., Liverpool-Tasie, L. S. O., y Awokuse, T. (2021). A revisit of farm size and productivity: Empirical evidence from a wide range of farm sizes in Nigeria. *World Development*, *146*, Article 105592. https://doi.org/10.1016/j.worlddev.2021.105592 | Examina la relación entre el tamaño de las explotaciones y la productividad agrícola, aportando evidencia empírica de un país en desarrollo. |
+| 2 | Impact of human capital and remittances on agricultural productivity in Bangladesh. (2025). *Journal of Agriculture and Food Research*, *22*, Article 102073. https://doi.org/10.1016/j.jafr.2025.102073 | Examina cómo la educación, la salud, la tecnología y las remesas se relacionan con la productividad laboral agrícola. |
+
+## Riego y productividad agrícola
+
+::: {.tabla-num}
+Tabla 2
+:::
+
+::: {.tabla-titulo}
+Literatura sobre riego y productividad agrícola
+:::
+
+| N.º | Referencia bibliográfica | Aporte a la investigación |
+|:---|:--------------------------------------------|:--------------------------|
+| 3 | Adhikari, R., Foster, T., Paudel, G. P., Urfels, A., Adhikari, S., y Krupnik, T. J. (2025). Impact of irrigation pump ownership on farm productivity in rice-wheat cropping systems of Nepal Terai. *Water Resources and Economics*, Article 100264. https://doi.org/10.1016/j.wre.2025.100264 | Encuentra que la propiedad de bombas de riego reduce los costos de acceso al agua y aumenta la productividad de arroz y trigo. |
+| 4 | Freitas, C. O., Silva, F. de F., y Neves, M. C. R. (2021). *A stochastic frontier approach applied to farms to selected Andean countries* (Technical Note). Inter-American Development Bank. https://doi.org/10.18235/0003660 | Incluye a Ecuador en el análisis andino y encuentra que el riego aumenta el valor de la producción; también examina la eficiencia técnica. |
+
+## Crédito agrícola y productividad
+
+::: {.tabla-num}
+Tabla 3
+:::
+
+::: {.tabla-titulo}
+Literatura sobre crédito agrícola y productividad (I)
+:::
+
+| N.º | Referencia bibliográfica | Aporte a la investigación |
+|:---|:--------------------------------------------|:--------------------------|
+| 5 | Balana, B. B., y Oyeyemi, M. A. (2022). Agricultural credit constraints in smallholder farming in developing countries: Evidence from Nigeria. *World Development Sustainability*, *1*, Article 100012. https://doi.org/10.1016/j.wds.2022.100012 | Identifica restricciones de oferta y demanda que limitan el acceso al crédito de pequeños productores agrícolas. |
+| 6 | Chandio, A. A., Jiang, Y., Wei, F., y Guangshun, X. (2018). Effects of agricultural credit on wheat productivity of small farms in Sindh, Pakistan. *Agricultural Finance Review*, *78*(5), 592–610. https://doi.org/10.1108/AFR-02-2017-0010 | Evalúa cómo los créditos de corto y largo plazo se relacionan con la productividad del trigo en pequeñas explotaciones. |
+| 7 | Impact of credit access on farm performance: Does source of credit matter? (2023). *Heliyon*, *9*(9), Article e19720. https://doi.org/10.1016/j.heliyon.2023.e19720 | Compara el crédito formal e informal y encuentra mejoras en productividad y eficiencia técnica, especialmente con financiamiento institucional. |
+
+## Infraestructura vial y productividad
+
+::: {.tabla-num}
+Tabla 4
+:::
+
+::: {.tabla-titulo}
+Literatura sobre infraestructura vial y productividad (I)
+:::
+
+| N.º | Referencia bibliográfica | Aporte a la investigación |
+|:---|:--------------------------------------------|:--------------------------|
+| 8 | Akintayo, O., Oyedokun, M., y Akindele, M. (2022). Agricultural productivity and access to market among farmers in Ekiti State, Nigeria. *Agro-Science*, *21*(2), 79–84. https://doi.org/10.4314/as.v21i2.9 | Relaciona la productividad agrícola con el acceso a mercados, un aspecto conectado con la disponibilidad y calidad de la infraestructura de transporte. |
+
+## Evidencia para Ecuador
+
+::: {.tabla-num}
+Tabla 5
+:::
+
+::: {.tabla-titulo}
+Evidencia empírica para Ecuador y rutas de pobreza
+:::
+
+| N.º | Referencia bibliográfica | Aporte a la investigación |
+|:---|:--------------------------------------------|:--------------------------|
+| 9 | Zhangallimbay, D., y Ordóñez, M. (2022). Efficiency in agricultural production: An analysis of the effect of road construction in productive areas of Ecuador. *Cuestiones Económicas*. https://estudioseconomicos.bce.fin.ec/index.php/RevistaCE/article/view/395 | Evalúa proyectos viales en El Oro y Manabí y encuentra efectos positivos sobre la productividad bananera y las ventas de cultivos permanentes. |
+| 10 | Aggarwal, S. (2018). Do rural roads create pathways out of poverty? Evidence from India. *Journal of Development Economics*, *133*, 375–395. | Aporta evidencia sobre cómo la conexión vial rural puede modificar las oportunidades económicas de los hogares y facilitar cambios productivos. |
+
+## Riego y productividad agrícola
+
+::: {.tabla-num}
+Tabla 6
+:::
+
+::: {.tabla-titulo}
+Literatura sobre riego y productividad agrícola (II)
+:::
+
+| N.º | Referencia bibliográfica | Aporte a la investigación |
+|:---|:--------------------------------------------|:--------------------------|
+| 11 | Smallholder irrigation and poverty reduction in developing countries: A review. (2023). *Heliyon*, *9*(2), Article e13341. https://doi.org/10.1016/j.heliyon.2023.e13341 | Revisa evidencia sobre los efectos del riego a pequeña escala en productividad, seguridad alimentaria y medios de vida rurales. |
+| 12 | Zhou et al. (2025). Exploring the impact of irrigation on China's crop TFP: Insights from a structural break analysis. *Asia & the Pacific Policy Studies*, *12*(1). https://doi.org/10.1002/app5.70007 | Examina la relación entre riego y productividad total de los factores agrícolas. |
+| 13 | Impact of water productivity and irrigated area expansion on irrigation water consumption and food production in China in last four decades. (2024). *Agricultural Water Management*, *304*, Article 109100. https://doi.org/10.1016/j.agwat.2024.109100 | Analiza cómo la expansión del área irrigada y la productividad del agua inciden en el consumo hídrico y la producción agrícola. |
+| 14 | Kumar, A., Bathla, S., Elumalai, K., y Saroj, S. (2025). Irrigation governance, private investment and agricultural productivity in India. https://doi.org/10.1177/09713441251395487 | Relaciona gobernanza del riego e inversión privada con la productividad. |
+
+## Crédito agrícola y productividad
+
+::: {.tabla-num}
+Tabla 7
+:::
+
+::: {.tabla-titulo}
+Literatura sobre crédito agrícola y productividad (II)
+:::
+
+| N.º | Referencia bibliográfica | Aporte a la investigación |
+|:---|:--------------------------------------------|:--------------------------|
+| 15 | Houensou, D. A., Goudjo, G. G., y Senou, M. M. (2021). Access to finance and difference in family farm productivity in Benin: Evidence from small farms. *Scientific African*, *13*, Article e00940. https://doi.org/10.1016/j.sciaf.2021.e00940 | Estudia el acceso al financiamiento y las diferencias de productividad entre pequeñas explotaciones familiares. |
+| 16 | Financial credit and cocoa productivity-enhancement agronomic practices in Ghana. (2025). *Scientific African*, *28*, Article e02691. https://doi.org/10.1016/j.sciaf.2025.e02691 | Estudia la relación entre el crédito financiero y la adopción de prácticas agronómicas orientadas a elevar la productividad del cacao. |
+| 17 | Impact of agricultural credit on coffee productivity in Kenya. (2024). *World Development Sustainability*, *5*, Article 100166. https://doi.org/10.1016/j.wds.2024.100166 | Evalúa el efecto de un programa de crédito agrícola sobre la productividad de pequeños productores de café. |
+| 18 | Impacts of multivalued interventions on maize farmers' welfare: Evidence from SIPMA development project in Ghana. (2024). *Heliyon*, Article e40325. https://doi.org/10.1016/j.heliyon.2024.e40325 | Analiza los efectos conjuntos del crédito, el acceso a mercados y la capacitación sobre el rendimiento del maíz y el ingreso agrícola. |
+| 19 | Demand and supply constraints of credit in smallholder farming: Evidence from Ethiopia and Tanzania. (2022). *World Development*, *159*, Article 106033. https://doi.org/10.1016/j.worlddev.2022.106033 | Examina las restricciones de oferta y demanda de crédito que enfrentan pequeños productores y sus diferencias entre hogares. |
+| 20 | Impact of credit access on farm performance: Does source of credit matter? (2023). *Heliyon*, *9*(9), Article e19720. https://doi.org/10.1016/j.heliyon.2023.e19720 | Compara el desempeño de las explotaciones según la fuente de financiamiento. |
+| 21 | Access to finance and difference in family farm productivity in Benin: Evidence from small farms. (2021). *Scientific African*, *13*, Article e00940. https://doi.org/10.1016/j.sciaf.2021.e00940 | Encuentra que el acceso al financiamiento se asocia con mayores niveles de productividad en pequeñas explotaciones familiares. |
+| 22 | Farm productivity under financial constraints in developing countries: Evidence from maize smallholder farmers in Burkina Faso. (2022). *Agricultural and Resource Economics Review*, *51*(2), 380–390. https://doi.org/10.1017/age.2022.8 | Analiza la relación entre restricciones financieras y productividad de pequeños productores de maíz. |
+| 23 | Impact of agricultural credit on coffee productivity in Kenya. (2024). *World Development Sustainability*, *5*, Article 100166. https://doi.org/10.1016/j.wds.2024.100166 | Es pertinente para examinar el financiamiento de productores de café y su productividad. |
+| 24 | Adoption of drought tolerant maize varieties and farmers' access to credit in Nigeria: Implications on productivity. (2023). *Sustainable Futures*, *6*, Article 100142. https://doi.org/10.1016/j.sftr.2023.100142 | Analiza cómo el acceso al crédito influye en la adopción de variedades de maíz tolerantes a la sequía y cómo esta adopción se relaciona con la productividad. |
+
+## Infraestructura vial y productividad agrícola
+
+::: {.tabla-num}
+Tabla 8
+:::
+
+::: {.tabla-titulo}
+Literatura sobre infraestructura vial y productividad agrícola (II)
+:::
+
+| N.º | Referencia bibliográfica | Aporte a la investigación |
+|:---|:--------------------------------------------|:--------------------------|
+| 25 | Tamene, S., y Megento, T. L. (2017). The effect of rural road transport infrastructure on smallholder farmers' agricultural productivity in Horro Guduru Wollega Zone, Western Ethiopia. *Acta Universitatis Carolinae, Geographica*, *52*(1), 89–99. https://doi.org/10.14712/23361980.2017.7 | Estudia cómo la distancia y el acceso a la infraestructura vial se relacionan con la productividad de pequeños agricultores. |
+| 26 | Rural roads, agricultural extension, and productivity. (2023). *Journal of Development Economics*, *162*, Article 103048. https://doi.org/10.1016/j.jdeveco.2023.103048 | Aborda la complementariedad entre caminos rurales, extensión agrícola y productividad. |
+| 27 | Gains from market integration: Welfare effects of new rural roads in Ethiopia. (2024). *Journal of Development Economics*, *168*, Article 103252. https://doi.org/10.1016/j.jdeveco.2024.103252 | Analiza los efectos de nuevas carreteras sobre la integración de mercados y el bienestar rural. |
+| 28 | Kiprono, P., y Matsumoto, T. (2018). Roads and farming: The effect of infrastructure improvement on agricultural intensification in South-Western Kenya. *Agrekon*, *57*(3–4), 198–220. https://doi.org/10.1080/03031853.2018.1518149 | Examina cómo la mejora de las carreteras se relaciona con la intensificación agrícola. |
+| 29 | Dercon, S., Gilligan, D. O., Hoddinott, J., y Woldehanna, T. (2009). The impact of agricultural extension and roads on poverty and consumption growth in fifteen Ethiopian villages. *American Journal of Agricultural Economics*, *91*(4), 1007–1021. https://doi.org/10.1111/j.1467-8276.2009.01325.x | Estudia conjuntamente la infraestructura vial y la extensión agrícola en el desarrollo rural. |
+| 30 | Fan, S., y Chan-Kang, C. (2005). *Road development, economic growth, and poverty reduction in China* (Research Report 138). International Food Policy Research Institute. | Complementa la discusión sobre infraestructura vial, crecimiento económico y reducción de pobreza. |
+| 31 | Jacoby, H. G. (2000). Access to markets and the benefits of rural roads. *The Economic Journal*, *110*(465), 713–737. https://doi.org/10.1111/1468-0297.00562 | Analiza los beneficios económicos del acceso a mercados mediante caminos rurales. |
+
+## Productividad total de los factores, inversión pública y brechas territoriales
+
+::: {.tabla-num}
+Tabla 9
+:::
+
+::: {.tabla-titulo}
+Literatura sobre productividad total de los factores, inversión pública y brechas territoriales
+:::
+
+| N.º | Referencia bibliográfica | Aporte a la investigación |
+|:---|:--------------------------------------------|:--------------------------|
+| 32 | Ma, Q., y Li, X. (2025). The impact of fiscal-financial synergistic support for agriculture on agricultural total factor productivity: Based on provincial panel data in China. *International Review of Economics & Finance*, *103*, Article 104556. https://doi.org/10.1016/j.iref.2025.104556 | Encuentra que el apoyo fiscal y financiero coordinado favorece la productividad total de los factores agrícolas. |
+| 33 | Li, J., y Yu, Y. (2025). Impact of government public data openness on agricultural total factor productivity. *International Review of Economics & Finance*, *104*, Article 104561. https://doi.org/10.1016/j.iref.2025.104561 | Analiza cómo la apertura de datos públicos puede contribuir a mejorar la productividad total de los factores agrícolas. |
+| 34 | The impact of place-based policy on agricultural green total factor productivity: Evidence from China. (2026). *Economic Analysis and Policy*, *89*, 287–305. https://doi.org/10.1016/j.eap.2025.12.007 | Evalúa el efecto de políticas territoriales sobre la productividad agrícola verde y destaca el papel de la infraestructura y las finanzas verdes. |
+| 35 | Examining foreign direct investment effects on agricultural productivity in Sub-Saharan African economies. (2025). *International Economics*, *184*, Article 100654. https://doi.org/10.1016/j.inteco.2025.100654 | Estudia la relación entre inversión extranjera directa y productividad total de los factores agrícolas en economías africanas. |
+| 36 | Li, T., Ormeño-Candelario, V., y Chen, X. (2026). Assessing agricultural green total factor productivity in Latin America. *Agribusiness*, *42*(2), 784–797. https://doi.org/10.1002/agr.22006 | Ofrece evidencia regional sobre la evolución de la productividad total de los factores agrícolas con consideración de impactos ambientales. |
+| 37 | Li, T., Ormeño-Candelario, V., y Chen, X. (2026). Assessing agricultural green total factor productivity in Latin America. *Agribusiness*, *42*(2), 784–797. https://doi.org/10.1002/agr.22006 | Introduce una perspectiva de productividad total de los factores con consideraciones ambientales. |
+| 38 | Productivity in the agricultural sector: A global outlook from a Latin American perspective. (2021). *International Journal of Agriculture and Natural Resources*, *48*(3). https://doi.org/10.7764/ijanr.v48i3.2341 | Compara la productividad total de los factores agrícolas entre países y considera infraestructura y variables macroeconómicas como posibles determinantes. |
+
+## Artículos fundamentales
+
+::: {.tabla-num}
+Tabla 10
+:::
+
+::: {.tabla-titulo}
+Artículos fundamentales
+:::
+
+| N.º | Referencia bibliográfica | Aporte a la investigación |
+|:---|:--------------------------------------------|:--------------------------|
+| 39 | Touch, V., Tan, D. K. Y., Cook, B. R., Liu, D. L., Cross, R., Tran, T. A., Utomo, A., Yous, S., Grunbuhel, C., y Cowie, A. (2024). Smallholder farmers' challenges and opportunities: Implications for agricultural production, environment and food security. *Journal of Environmental Management*, *370*, Article 122536. https://doi.org/10.1016/j.jenvman.2024.122536 | Presenta una visión integral de los factores que condicionan la producción, las estrategias de los pequeños agricultores y la seguridad alimentaria. |
+| 40 | Zaman, K. (2024). Total factor productivity, transitional dynamics and endogenous growth accounting for Latin America: Evidence from two centuries' data. *Economics of Transition and Institutional Change*, *32*(4), 1079–1103. https://doi.org/10.1111/ecot.12411 | Aporta un marco regional para comprender la productividad total de los factores, la innovación, la educación y los efectos de conocimiento en América Latina. |

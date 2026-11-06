@@ -1,0 +1,36 @@
+project:
+  type: book
+  output-dir: _book
+
+book:
+  title: "¿Dónde rinde más la tierra?"
+  subtitle: "Riego, crédito y vías como determinantes de la productividad agrícola en las provincias del Ecuador"
+  author:
+    - "Miguel Honores y Mauricio Sinchire"
+    - "Universidad Nacional de Loja"
+    - "Economía"
+  date: today
+  date-format: "DD/MM/YYYY"
+  chapters:
+    - text: "Portada"
+      href: index.qmd
+    - 01-introduccion.qmd
+    - 02-objetivos.qmd
+    - 03-marco-teorico.qmd
+    - 04-referencias-apa7.qmd
+  page-footer: ""
+  search: true
+  repo-actions: none
+
+lang: es
+
+format:
+  html:
+    theme: cosmo
+    css: apa.css
+    toc: false
+    number-sections: false
+  docx:
+    reference-doc: apa-reference.docx
+    number-sections: false
+    toc: false

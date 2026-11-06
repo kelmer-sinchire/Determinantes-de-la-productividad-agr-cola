@@ -1,0 +1,62 @@
+[
+  {
+    "objectID": "01-introduccion.html",
+    "href": "01-introduccion.html",
+    "title": "1. Introducción",
+    "section": "",
+    "text": "La agricultura sigue siendo una de las actividades de las que más depende la economía ecuatoriana. De ella provienen una parte importante de las exportaciones y de los alimentos que abastecen a los hogares, además del sustento de numerosas familias rurales. Sin embargo, la tierra no rinde lo mismo en todo el territorio, una hectárea cosechada en una provincia puede generar un valor muy superior al de otra, y esa diferencia refleja las condiciones, los recursos y la infraestructura con que produce cada territorio.\nLa literatura económica suele atribuir estas diferencias a tres factores principales. El primero es el riego, que reduce la dependencia de la lluvia, da mayor seguridad a la siembra y permite aprovechar mejor los insumos. El segundo es el crédito, que facilita la compra de semillas, fertilizantes y maquinaria sin esperar a la cosecha. El tercero es la infraestructura vial, que abarata el transporte de insumos y de producción y acerca a los productores a los mercados. A ellos se suma el contexto social del campo, en particular la pobreza y la escolaridad de la población rural, que condicionan la capacidad de inversión y la adopción de mejores técnicas.\nEn Ecuador existen estudios sobre productividad agrícola, pero los revisados tienden a concentrarse en un solo cultivo, en un territorio específico o en la estimación de rendimientos, y no en comparar la importancia relativa de los determinantes entre provincias. Un ejemplo es la estimación del rendimiento de café y cacao a nivel cantonal mediante el modelo Fay-Herriot, que cuantifica cuánto se produce, pero no explica los factores que lo determinan. Este artículo busca aportar en esa dirección al analizar, para las provincias del país, qué factor se asocia más con las diferencias de productividad.\nEl análisis enfrenta limitaciones que conviene reconocer. El número de unidades de estudio es reducido (24 provincias), lo que restringe la potencia estadística, especialmente en el análisis espacial. Además, la productividad se mide en dólares por hectárea e incluye flores, por lo que combina la producción física con los precios y con la composición de cultivos de cada provincia. Finalmente, el riego, el crédito y las vías tienden a coincidir en los mismos territorios, lo que dificulta aislar el aporte de cada uno.\nTambién existen potencialidades. Se dispone de indicadores comparables para todas las provincias, y la red vial se presenta desagregada en vías arteriales y colectoras. Esto permite contrastar si resulta más relevante la conexión troncal con los grandes mercados o las vías que recogen la producción local. Identificar el factor más determinante puede, además, orientar la inversión pública hacia el riego, el financiamiento o la vialidad.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>1. Introducción</span>"
+    ]
+  },
+  {
+    "objectID": "02-objetivos.html",
+    "href": "02-objetivos.html",
+    "title": "2. Objetivos",
+    "section": "",
+    "text": "2.1. Objetivo descriptivo\nDescribir el comportamiento de la productividad agrícola en las provincias del Ecuador y su relación con el riego, el crédito agrícola y la infraestructura vial, a fin de identificar cuál de estos factores se asocia en mayor medida con las diferencias entre provincias.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>2. Objetivos</span>"
+    ]
+  },
+  {
+    "objectID": "02-objetivos.html#objetivo-descriptivo",
+    "href": "02-objetivos.html#objetivo-descriptivo",
+    "title": "2. Objetivos",
+    "section": "",
+    "text": "Objetivos específicos del componente descriptivo\n\nDescribir la distribución provincial de la productividad agrícola (USD por hectárea) e identificar las provincias de mayor y menor desempeño.\nCaracterizar el acceso a riego, el crédito por hectárea y la red vial (total, arterial y colectora) en cada provincia.\nDescribir las condiciones de pobreza rural y escolaridad que acompañan a la productividad en cada provincia.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>2. Objetivos</span>"
+    ]
+  },
+  {
+    "objectID": "02-objetivos.html#objetivo-de-modelación",
+    "href": "02-objetivos.html#objetivo-de-modelación",
+    "title": "2. Objetivos",
+    "section": "2.2. Objetivo de modelación",
+    "text": "2.2. Objetivo de modelación\nEstimar un modelo econométrico que cuantifique el efecto del riego, el crédito agrícola y la infraestructura vial sobre la productividad agrícola provincial, controlando por la pobreza rural y la escolaridad rural, para determinar cuál de estos factores resulta más determinante.\n\nObjetivos específicos del componente de modelación\n\nEspecificar y estimar un modelo de regresión múltiple de la productividad agrícola (USD por hectárea) en función del porcentaje de superficie con riego, el crédito por hectárea y la densidad de la red vial, incorporando la pobreza y la escolaridad rural como variables de control.\nComparar la magnitud relativa de los efectos de cada variable explicativa mediante coeficientes estandarizados, a fin de establecer su importancia en la explicación de la productividad.\nContrastar el efecto diferenciado de las vías arteriales y las vías colectoras sobre la productividad.\nEvaluar la presencia de dependencia espacial entre provincias mediante el índice de Moran y verificar la robustez del modelo con pruebas de diagnóstico (multicolinealidad, heterocedasticidad y normalidad de los residuos).",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>2. Objetivos</span>"
+    ]
+  },
+  {
+    "objectID": "03-marco-teorico.html",
+    "href": "03-marco-teorico.html",
+    "title": "3. Marco teórico",
+    "section": "",
+    "text": "Productividad agrícola. La productividad expresa la relación entre lo producido y los recursos empleados. En este estudio se mide como el valor bruto de la producción por hectárea cosechada. Este indicador permite comparar provincias con cultivos distintos, aunque incorpora los precios y la mezcla de cultivos de cada territorio. Desde la teoría de la función de producción (Solow, 1956), el producto depende de la tierra, el trabajo, el capital y la tecnología; el riego, el crédito y las vías pueden entenderse como formas de capital o como condiciones que elevan la eficiencia de los demás factores.\nRiego. El agua controlada reduce el riesgo de pérdidas por sequía, permite sembrar en época seca y mejora la respuesta de los cultivos a fertilizantes y semillas mejoradas. La evidencia empírica revisada por Hussain y Hanjra (2004) muestra que el riego incrementa la productividad y contribuye a reducir la pobreza rural. Por ello se espera una relación positiva entre el riego y la productividad (H1).\nCrédito agrícola. Los pequeños productores enfrentan restricciones de financiamiento derivadas de la falta de garantías y de la información imperfecta en los mercados de crédito (Stiglitz y Weiss, 1981). Cuando el crédito está disponible, permite invertir en insumos y tecnología, con efectos positivos sobre la productividad (Feder et al., 1990). Se espera, por tanto, un efecto positivo (H2), condicionado al destino del crédito y a la capacidad del productor para aprovecharlo.\nInfraestructura vial. Las vías reducen los costos de transacción, amplían el acceso a mercados e insumos y vuelven rentable la adopción de tecnología. Binswanger, Khandker y Rosenzweig (1993) y Fan, Hazell y Thorat (2000) encuentran que la inversión en infraestructura vial aumenta la producción agrícola y reduce la pobreza rural. En este estudio se distingue entre vías arteriales, que conectan regiones y grandes mercados, y vías colectoras, que recogen la producción de cada zona, pues su efecto podría diferir. Se espera una relación positiva (H3).\nCondiciones sociales rurales. La educación facilita la adopción de innovaciones y una mejor gestión de la unidad productiva (Schultz, 1964). La pobreza, por su parte, limita la capacidad de ahorro e inversión y, a la vez, puede ser consecuencia de una baja productividad. Debido a esta causalidad bidireccional, ambas variables se emplean como variables de contexto y no como determinantes directos.\nDependencia espacial. Según la primera ley de la geografía de Tobler (1970), todo se relaciona con todo, pero las cosas próximas se relacionan más que las distantes. Las provincias vecinas comparten clima, mercados, vías y prácticas productivas, por lo que su productividad puede presentar correlación espacial, aspecto que se evalúa mediante el índice de Moran (H4). Dado el número reducido de provincias, este análisis se considera complementario.\nEvidencia previa. Los estudios sobre Ecuador se orientan principalmente a cultivos específicos o a la estimación de rendimientos, con escasa comparación de los determinantes entre provincias. Este trabajo busca contribuir a cubrir ese vacío.\nModelación de los determinantes de la productividad. El análisis de los determinantes de la productividad agrícola suele abordarse mediante modelos de regresión derivados de la función de producción, en los que el producto por unidad de superficie se expresa en función de factores productivos y condiciones del entorno (Wooldridge, 2010). En este estudio, la productividad provincial se modela como función del riego, el crédito y la infraestructura vial, incorporando la pobreza y la escolaridad rural como variables de control. Dado que estas variables tienden a presentar correlación entre sí, la interpretación de los coeficientes requiere evaluar la multicolinealidad. Para determinar cuál factor resulta más determinante, se recurre a la comparación de coeficientes estandarizados, que permiten contrastar efectos expresados en unidades distintas. Finalmente, cuando las unidades de análisis son territorios contiguos, los residuos del modelo pueden presentar autocorrelación espacial, lo que se verifica mediante el índice de Moran (Anselin, 1988) y, de ser necesario, se corrige con modelos de rezago o de error espacial.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>3. Marco teórico</span>"
+    ]
+  },
+  {
+    "objectID": "04-referencias-apa7.html",
+    "href": "04-referencias-apa7.html",
+    "title": "Referencias",
+    "section": "",
+    "text": "Anselin, L. (1988). Spatial econometrics: Methods and models. Kluwer Academic Publishers.\nBinswanger, H. P., Khandker, S. R., & Rosenzweig, M. R. (1993). How infrastructure and financial institutions affect agricultural output and investment in India. Journal of Development Economics, 41(2), 337–366.\nFan, S., Hazell, P., & Thorat, S. (2000). Government spending, growth and poverty in rural India. American Journal of Agricultural Economics, 82(4), 1038–1051.\nFeder, G., Lau, L. J., Lin, J. Y., & Luo, X. (1990). The relationship between credit and productivity in Chinese agriculture: A microeconomic model of disequilibrium. American Journal of Agricultural Economics, 72(5), 1151–1157.\nHussain, I., & Hanjra, M. A. (2004). Irrigation and poverty alleviation: Review of the empirical evidence. Irrigation and Drainage, 53(1), 1–15.\nSchultz, T. W. (1964). Transforming traditional agriculture. Yale University Press.\nSolow, R. M. (1956). A contribution to the theory of economic growth. The Quarterly Journal of Economics, 70(1), 65–94.\nStiglitz, J. E., & Weiss, A. (1981). Credit rationing in markets with imperfect information. The American Economic Review, 71(3), 393–410.\nTobler, W. R. (1970). A computer movie simulating urban growth in the Detroit region. Economic Geography, 46(sup1), 234–240.\nWooldridge, J. M. (2010). Econometric analysis of cross section and panel data (2.ª ed.). MIT Press.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Referencias</span>"
+    ]
+  }
+]

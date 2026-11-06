@@ -1,0 +1,154 @@
+/* ============================================================
+   Estilo APA 7 (aproximado) para el libro Quarto
+   Times New Roman 12 pt, doble espacio, texto alineado a la izquierda
+   ============================================================ */
+
+#quarto-document-content,
+#quarto-document-content p,
+#quarto-document-content li,
+#quarto-document-content td,
+#quarto-document-content th {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 12pt;
+  color: #000;
+}
+
+#quarto-document-content {
+  line-height: 2;
+  text-align: left;
+}
+
+#quarto-document-content p {
+  text-align: left;
+  text-indent: 0.5in;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+/* Nivel 1: centrado, negrita */
+#quarto-document-content h1 {
+  text-align: center;
+  font-weight: bold;
+  font-size: 12pt;
+  line-height: 2;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  text-transform: none;
+}
+
+/* Nivel 2: izquierda, negrita */
+#quarto-document-content h2 {
+  text-align: left;
+  font-weight: bold;
+  font-size: 12pt;
+  line-height: 2;
+  margin-top: 1em;
+  margin-bottom: 0;
+}
+
+/* Nivel 3: izquierda, negrita cursiva */
+#quarto-document-content h3 {
+  text-align: left;
+  font-weight: bold;
+  font-style: italic;
+  font-size: 12pt;
+  line-height: 2;
+  margin-top: 1em;
+  margin-bottom: 0;
+}
+
+#quarto-document-content ul,
+#quarto-document-content ol {
+  padding-left: 0.75in;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+#quarto-document-content li {
+  margin-bottom: 0;
+  text-align: left;
+}
+
+#quarto-document-content li > p {
+  text-indent: 0;
+}
+
+/* Referencias: sangría francesa de 0.5 in */
+#quarto-document-content .references p {
+  text-indent: -0.5in;
+  padding-left: 0.5in;
+  margin-left: 0;
+  text-align: left;
+}
+
+/* Bloque de título automático (portada del libro) */
+#quarto-document-content #title-block-header {
+  text-align: center;
+  margin-top: 2in;
+  margin-bottom: 1.5in;
+}
+
+#quarto-document-content #title-block-header .quarto-title .title {
+  text-align: center;
+  font-size: 16pt;
+  font-weight: bold;
+  line-height: 1.5;
+}
+
+#quarto-document-content #title-block-header p,
+#quarto-document-content #title-block-header .subtitle,
+#quarto-document-content #title-block-header .date {
+  text-indent: 0;
+  text-align: center;
+}
+
+#quarto-document-content #title-block-header .subtitle {
+  font-size: 12pt;
+  font-weight: normal;
+  line-height: 2;
+  margin-bottom: 1.5in;
+}
+
+#quarto-document-content #title-block-header .quarto-title-meta {
+  display: block;
+  text-align: center;
+}
+
+#quarto-document-content #title-block-header .quarto-title-meta-heading {
+  display: none;
+}
+
+#quarto-document-content #title-block-header .quarto-title-meta-contents {
+  text-align: center;
+}
+
+/* Portada (por si se usa un capítulo de portada manual) */
+#quarto-document-content .titlepage {
+  text-align: center;
+  margin-top: 2in;
+}
+
+#quarto-document-content .titlepage .title-main p {
+  font-size: 16pt;
+  font-weight: bold;
+  line-height: 1.5;
+  text-indent: 0;
+  text-align: center;
+  margin: 0 0 0.5in 0;
+}
+
+#quarto-document-content .titlepage .title-sub p {
+  font-size: 12pt;
+  font-weight: normal;
+  line-height: 2;
+  text-indent: 0;
+  text-align: center;
+  margin: 0 0 1.5in 0;
+}
+
+#quarto-document-content .titlepage p {
+  text-indent: 0;
+  text-align: center;
+  line-height: 2;
+  margin: 0;
+}
