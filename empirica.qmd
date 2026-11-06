@@ -1,0 +1,568 @@
+---
+title: "empirica"
+author: "Miguel, Mauricio"
+format: html
+editor: visual
+---
+
+## Preparación
+
+```{r}
+# ============================================================
+# 08_figuras_objetivos.R
+# Una figura por objetivo específico (base final: modelo_2025.rds)
+#   Fig. 1  Objetivo 1: ranking provincial de productividad
+#   Fig. 2  Objetivo 2: acceso a riego, crédito y vías (mapa de calor)
+#   Fig. 3  Objetivo 3: pobreza y escolaridad rural junto a la productividad
+#   Fig. 4  Objetivo 4: intensidad de la asociación con la productividad
+# ============================================================
+
+# ---- Sección 0. Preparación (correr siempre primero) ----
+library(tidyverse)
+library(patchwork)
+setwd("D:/Documents/GITHUB/rendimiento_por_h")
+dir.create("resultados/figuras", recursive = TRUE, showWarnings = FALSE)
+
+d <- readRDS("base_oficial/modelo_2025.rds")
+
+region_de <- c(   # Santo Domingo de los Tsáchilas va en Costa; cámbialo aquí si usas otro criterio
+  "07"="Costa", "08"="Costa", "09"="Costa", "12"="Costa", "13"="Costa", "23"="Costa", "24"="Costa",
+  "01"="Sierra", "02"="Sierra", "03"="Sierra", "04"="Sierra", "05"="Sierra", "06"="Sierra",
+  "10"="Sierra", "11"="Sierra", "17"="Sierra", "18"="Sierra",
+  "14"="Amazonía", "15"="Amazonía", "16"="Amazonía", "19"="Amazonía", "21"="Amazonía", "22"="Amazonía")
+d <- d %>% mutate(region = factor(unname(region_de[provincia]), levels = c("Costa", "Sierra", "Amazonía")))
+stopifnot(nrow(d) == 23, !anyNA(d$region))
+
+col_region <- c("Costa" = "#D55E00", "Sierra" = "#0072B2", "Amazonía" = "#009E73")
+fmt   <- scales::label_number(big.mark = ".", decimal.mark = ",", accuracy = 1)
+fmt1  <- scales::label_number(big.mark = ".", decimal.mark = ",", accuracy = 0.1)
+fmt2  <- scales::label_number(big.mark = ".", decimal.mark = ",", accuracy = 0.01)
+
+tema_rev <- theme_classic(base_size = 11) +
+  theme(axis.text = element_text(colour = "black"), axis.line = element_line(linewidth = 0.4),
+        legend.position = "bottom", legend.title = element_blank(),
+        plot.margin = margin(8, 12, 8, 8))
+sin_eje_y <- theme(axis.ticks.y = element_blank(), axis.line.y = element_blank())
+
+guardar <- function(p, nombre, ancho = 7, alto = 5) {   # PDF vectorial, PNG y TIFF a 600 dpi
+  base <- file.path("resultados/figuras", nombre)
+  ggsave(paste0(base, ".pdf"),  p, width = ancho, height = alto, device = cairo_pdf)
+  ggsave(paste0(base, ".png"),  p, width = ancho, height = alto, dpi = 600)
+  ggsave(paste0(base, ".tiff"), p, width = ancho, height = alto, dpi = 600, compression = "lzw")
+}
+
+
+```
+
+## Sección 1. Objetivo 1: ranking provincial de productividad
+
+```{r}
+# ---- Sección 1. Objetivo 1: ranking provincial de productividad (Figura 1) ----
+x1    <- d$productividad_usd_ha
+med   <- median(x1)
+q     <- quantile(x1, c(0.25, 0.75))
+n_alto <- sum(x1 >= q[2]); n_bajo <- sum(x1 <= q[1])
+sub1  <- paste0("Mediana provincial: ", fmt(med), " USD/ha   |   Razón entre la mayor y la menor: ",
+                fmt1(max(x1) / min(x1)), " veces   |   Coeficiente de variación: ",
+                fmt1(100 * sd(x1) / mean(x1)), " %")
+
+f1 <- d %>% mutate(prov_f = fct_reorder(provincia_nom, productividad_usd_ha), base = 1000)
+
+fig1 <- ggplot(f1, aes(y = prov_f)) +
+  annotate("rect", xmin = 1000, xmax = 40000, ymin = 23.5 - n_alto, ymax = 23.5,
+           fill = "#2166AC", alpha = 0.08) +                       # cuartil superior
+  annotate("rect", xmin = 1000, xmax = 40000, ymin = 0.5, ymax = n_bajo + 0.5,
+           fill = "#B2182B", alpha = 0.08) +                       # cuartil inferior
+  geom_segment(aes(x = base, xend = productividad_usd_ha, yend = prov_f, colour = region),
+               linewidth = 4.5, lineend = "butt") +
+  geom_vline(xintercept = med, linetype = "dashed", linewidth = 0.4) +
+  geom_text(aes(x = productividad_usd_ha, label = fmt(productividad_usd_ha)), hjust = -0.2, size = 3) +
+  scale_x_log10(limits = c(1000, 40000), breaks = c(1000, 2000, 5000, 10000, 20000),
+                labels = fmt, expand = c(0, 0)) +
+  scale_y_discrete(expand = expansion(add = c(0.5, 0.5))) +
+  scale_colour_manual(values = col_region) +
+  guides(colour = guide_legend(override.aes = list(linewidth = 3))) +
+  labs(x = "Productividad (USD por hectárea cosechada, escala logarítmica)", y = NULL,
+       subtitle = sub1,
+       caption = paste0("Sombreado azul: cuartil superior de productividad; sombreado rojo: cuartil inferior. ",
+                        "Línea discontinua: mediana. Las barras parten de 1.000 USD/ha.")) +
+  tema_rev + sin_eje_y +
+  theme(plot.subtitle = element_text(size = 9, hjust = 0), plot.caption = element_text(hjust = 0, size = 8))
+
+guardar(fig1, "fig1_distribucion_productividad", ancho = 7.5, alto = 7.5)
+print(fig1)
+```
+
+## Sección 2. Objetivo 2: acceso a riego, crédito y vías
+
+```{r}
+# ---- Sección 2. Objetivo 2: acceso a riego, crédito y vías (Figura 2) ----
+# El color es la posición relativa (percentil) de cada provincia en cada indicador; no depende de
+# la escala, así el crédito (muy asimétrico) no domina. Los números de las celdas son los valores reales.
+hm <- d %>%
+  transmute(prov = provincia_nom, prod = productividad_usd_ha, riego = riego_pct,
+            credito = credito_usd_ha, v_tot = vias_km_100km2,
+            v_art = vias_arterial_km_100km2, v_col = vias_colectora_km_100km2) %>%
+  pivot_longer(c(riego, credito, v_tot, v_art, v_col), names_to = "indicador", values_to = "valor") %>%
+  group_by(indicador) %>% mutate(pct = 100 * percent_rank(valor)) %>% ungroup() %>%
+  mutate(etiqueta  = if_else(indicador == "credito", fmt(valor), fmt1(valor)),
+         indicador = factor(indicador, levels = c("riego", "credito", "v_tot", "v_art", "v_col"),
+                            labels = c("Riego\n(% de la superficie)", "Crédito\n(USD por ha)",
+                                       "Vías, total\n(km por 100 km²)", "Vías arteriales\n(km por 100 km²)",
+                                       "Vías colectoras\n(km por 100 km²)")),
+         prov_f = fct_reorder(prov, prod))
+
+fig2 <- ggplot(hm, aes(indicador, prov_f, fill = pct)) +
+  geom_tile(colour = "white", linewidth = 0.6) +
+  geom_text(aes(label = etiqueta, colour = pct > 65), size = 3, show.legend = FALSE) +
+  scale_colour_manual(values = c("TRUE" = "white", "FALSE" = "black")) +
+  scale_fill_gradient(low = "#EEF3F8", high = "#0B3D6B", limits = c(0, 100),
+                      name = "Posición relativa entre las 23 provincias\n(0 = menor, 100 = mayor)") +
+  scale_x_discrete(position = "top") +
+  labs(x = NULL, y = NULL,
+       caption = "Provincias ordenadas de mayor (arriba) a menor productividad. Las vías total = arteriales + colectoras.") +
+  tema_rev + sin_eje_y +
+  theme(axis.line = element_blank(), axis.ticks.x = element_blank(),
+        legend.title = element_text(size = 8), legend.key.width = unit(1.6, "cm"),
+        plot.caption = element_text(hjust = 0, size = 8))
+
+guardar(fig2, "fig2_acceso_riego_credito_vias", ancho = 8, alto = 7.5)
+print(fig2)
+```
+
+## Sección 3. Objetivo 3: pobreza y escolaridad rural junto a la productividad
+
+```{r}
+# ---- Sección 3. Objetivo 3: pobreza y escolaridad rural junto a la productividad (Figura 3) ----
+f3 <- d %>% mutate(prov_f = fct_reorder(provincia_nom, productividad_usd_ha), base = 1000)
+med_p <- median(d$pobreza_rural_pct); med_e <- median(d$escolaridad_rural_anios)
+
+pa <- ggplot(f3, aes(y = prov_f)) +
+  geom_segment(aes(x = base, xend = productividad_usd_ha, yend = prov_f, colour = region),
+               linewidth = 4, lineend = "butt") +
+  geom_vline(xintercept = med, linetype = "dashed", linewidth = 0.4) +
+  geom_text(aes(x = productividad_usd_ha, label = fmt(productividad_usd_ha)), hjust = -0.15, size = 2.8) +
+  scale_x_log10(limits = c(1000, 60000), breaks = c(1000, 2000, 5000, 10000, 20000),
+                labels = fmt, expand = c(0, 0)) +
+  scale_colour_manual(values = col_region) +
+  labs(x = "Productividad\n(USD/ha, escala logarítmica)", y = NULL) + tema_rev + sin_eje_y
+
+pb <- ggplot(f3, aes(y = prov_f)) +
+  geom_segment(aes(x = 0, xend = pobreza_rural_pct, yend = prov_f, colour = region),
+               linewidth = 4, lineend = "butt") +
+  geom_vline(xintercept = med_p, linetype = "dashed", linewidth = 0.4) +
+  geom_text(aes(x = pobreza_rural_pct, label = fmt1(pobreza_rural_pct)), hjust = -0.15, size = 2.8) +
+  scale_x_continuous(limits = c(0, 100), breaks = seq(0, 80, 20), expand = c(0, 0)) +
+  scale_colour_manual(values = col_region) +
+  labs(x = "Pobreza rural\n(% de la población rural)", y = NULL) + tema_rev + sin_eje_y +
+  theme(axis.text.y = element_blank())
+
+pc <- ggplot(f3, aes(y = prov_f)) +
+  geom_segment(aes(x = 0, xend = escolaridad_rural_anios, yend = prov_f, colour = region),
+               linewidth = 4, lineend = "butt") +
+  geom_vline(xintercept = med_e, linetype = "dashed", linewidth = 0.4) +
+  geom_text(aes(x = escolaridad_rural_anios, label = fmt1(escolaridad_rural_anios)), hjust = -0.15, size = 2.8) +
+  scale_x_continuous(limits = c(0, 12), breaks = seq(0, 10, 2), expand = c(0, 0)) +
+  scale_colour_manual(values = col_region) +
+  labs(x = "Escolaridad rural\n(años de estudio, 25 años o más)", y = NULL) + tema_rev + sin_eje_y +
+  theme(axis.text.y = element_blank())
+
+fig3 <- (pa | pb | pc) +
+  plot_layout(widths = c(1.6, 1, 1), guides = "collect") +
+  plot_annotation(tag_levels = "A",
+                  caption = "Provincias ordenadas de mayor (arriba) a menor productividad. Líneas discontinuas: mediana provincial.") &
+  theme(legend.position = "bottom", plot.tag = element_text(face = "bold"),
+        plot.caption = element_text(hjust = 0, size = 8)) &
+  guides(colour = guide_legend(override.aes = list(linewidth = 3)))
+
+guardar(fig3, "fig3_pobreza_escolaridad_productividad", ancho = 9, alto = 7.5)
+print(fig3)
+
+```
+
+## Sección 4. Objetivo 4: intensidad de la asociación con la productividad
+
+```{r}
+# ---- Sección 4. Objetivo 4: intensidad de la asociación con la productividad (Figura 4) ----
+vars4 <- c(riego_pct = "Riego (%)", credito_usd_ha = "Crédito (USD/ha)",
+           vias_km_100km2 = "Vías, total", vias_arterial_km_100km2 = "Vías arteriales",
+           vias_colectora_km_100km2 = "Vías colectoras", pobreza_rural_pct = "Pobreza rural (%)",
+           escolaridad_rural_anios = "Escolaridad rural (años)")
+rol4 <- c(rep("Determinante", 5), rep("Contexto", 2))
+
+# Panel A: correlación de Spearman (usa rangos, por eso no cambia con el logaritmo) e IC bootstrap
+set.seed(2025)
+boot_rho <- function(x, y, B = 5000) {
+  r <- replicate(B, { i <- sample(length(x), replace = TRUE)
+  suppressWarnings(cor(x[i], y[i], method = "spearman")) })
+  quantile(r, c(0.025, 0.975), na.rm = TRUE)
+}
+y <- d$productividad_usd_ha
+tabA <- map_dfr(seq_along(vars4), function(i) {
+  x  <- d[[names(vars4)[i]]]
+  sp <- suppressWarnings(cor.test(x, y, method = "spearman", exact = FALSE))
+  ci <- boot_rho(x, y)
+  tibble(variable = vars4[[i]], rol = rol4[i], rho = unname(sp$estimate),
+         inf = unname(ci[1]), sup = unname(ci[2]), p = sp$p.value)
+})
+
+pA <- tabA %>% mutate(variable = fct_reorder(variable, abs(rho))) %>%
+  ggplot(aes(rho, variable, colour = rol)) +
+  geom_vline(xintercept = 0, linewidth = 0.4) +
+  geom_linerange(aes(xmin = inf, xmax = sup), orientation = "y", linewidth = 0.8) +
+  geom_point(size = 3.2) +
+  geom_text(aes(label = fmt2(rho)), vjust = -1.1, size = 3, show.legend = FALSE) +
+  scale_x_continuous(limits = c(-1, 1), breaks = seq(-1, 1, 0.5),
+                     labels = scales::label_number(decimal.mark = ",", accuracy = 0.1)) +
+  scale_colour_manual(values = c("Determinante" = "#0072B2", "Contexto" = "#CC79A7")) +
+  labs(title = "Correlación simple con la productividad",
+       x = "Coeficiente de Spearman (\u03c1) e intervalo de confianza del 95 % (bootstrap)", y = NULL) +
+  tema_rev + theme(plot.title = element_text(size = 10, face = "bold"))
+
+# Panel B: regresión múltiple con variables estandarizadas (log10 de productividad y de crédito)
+dz <- d %>% transmute(
+  y = as.numeric(scale(log10(productividad_usd_ha))), riego = as.numeric(scale(riego_pct)),
+  credito = as.numeric(scale(log10(credito_usd_ha))), arterial = as.numeric(scale(vias_arterial_km_100km2)),
+  colectora = as.numeric(scale(vias_colectora_km_100km2)))
+mB <- lm(y ~ riego + credito + arterial + colectora, data = dz)
+etq <- c(riego = "Riego (%)", credito = "Crédito (USD/ha)", arterial = "Vías arteriales", colectora = "Vías colectoras")
+ciB <- confint(mB)
+tabB <- tibble(variable = unname(etq[names(coef(mB))[-1]]), beta = unname(coef(mB))[-1],
+               inf = ciB[-1, 1], sup = ciB[-1, 2], p = summary(mB)$coefficients[-1, 4])
+
+pB <- tabB %>% mutate(variable = fct_reorder(variable, abs(beta))) %>%
+  ggplot(aes(beta, variable)) +
+  geom_vline(xintercept = 0, linewidth = 0.4) +
+  geom_linerange(aes(xmin = inf, xmax = sup), orientation = "y", linewidth = 0.8, colour = "#0072B2") +
+  geom_point(size = 3.2, colour = "#0072B2") +
+  geom_text(aes(label = fmt2(beta)), vjust = -1.1, size = 3) +
+  scale_x_continuous(labels = scales::label_number(decimal.mark = ",", accuracy = 0.1)) +
+  labs(title = "Efecto estandarizado controlando por las demás variables",
+       x = "Coeficiente estandarizado (desviaciones estándar de log10 productividad por DE) e IC 95 %", y = NULL) +
+  tema_rev + theme(plot.title = element_text(size = 10, face = "bold"))
+
+fig4 <- (pA / pB) + plot_layout(heights = c(7, 4)) +
+  plot_annotation(tag_levels = "A",
+                  caption = "n = 23 provincias. Asociación, no causalidad. En B se excluye 'vías total' por ser la suma de arteriales y colectoras.") &
+  theme(plot.tag = element_text(face = "bold"), plot.caption = element_text(hjust = 0, size = 8))
+
+guardar(fig4, "fig4_asociacion_productividad", ancho = 7.5, alto = 8.5)
+print(fig4)
+
+# Números detrás de las figuras (para revisar):
+print(tabA, width = Inf)
+print(tabB, width = Inf)
+cat("\nR2 del modelo del panel B:", round(summary(mB)$r.squared, 3),
+    "| R2 ajustado:", round(summary(mB)$adj.r.squared, 3), "\n")
+```
+
+# TABLAS POR CADA OBJETIVO
+
+## Preparación
+
+```{r}
+# ============================================================
+# 09_tablas_objetivos.R
+# Una tabla (con paneles) por objetivo específico. Base final: modelo_2025.rds
+#   Tabla 1  Objetivo 1: distribución de la productividad (incluye ANOVA)
+#   Tabla 2  Objetivo 2: acceso a riego, crédito y vías
+#   Tabla 3  Objetivo 3: pobreza y escolaridad rural
+#   Tabla 4  Objetivo 4: intensidad de la asociación con la productividad
+# ============================================================
+
+# ---- Sección 0. Preparación (correr siempre primero) ----
+library(tidyverse)
+setwd("D:/Documents/GITHUB/rendimiento_por_h")
+dir.create("resultados/tablas", recursive = TRUE, showWarnings = FALSE)
+
+d <- readRDS("base_oficial/modelo_2025.rds")
+region_de <- c(   # Santo Domingo de los Tsáchilas va en Costa; cámbialo aquí si usas otro criterio
+  "07"="Costa", "08"="Costa", "09"="Costa", "12"="Costa", "13"="Costa", "23"="Costa", "24"="Costa",
+  "01"="Sierra", "02"="Sierra", "03"="Sierra", "04"="Sierra", "05"="Sierra", "06"="Sierra",
+  "10"="Sierra", "11"="Sierra", "17"="Sierra", "18"="Sierra",
+  "14"="Amazonía", "15"="Amazonía", "16"="Amazonía", "19"="Amazonía", "21"="Amazonía", "22"="Amazonía")
+d <- d %>% mutate(region = factor(unname(region_de[provincia]), levels = c("Costa", "Sierra", "Amazonía")))
+stopifnot(nrow(d) == 23, !anyNA(d$region))
+
+med <- median(d$productividad_usd_ha)
+q   <- quantile(d$productividad_usd_ha, c(0.25, 0.75))
+d <- d %>% mutate(
+  pos_prod  = rank(-productividad_usd_ha, ties.method = "min"),
+  indice    = 100 * productividad_usd_ha / med,
+  desempeno = factor(case_when(productividad_usd_ha >= q[2] ~ "Alto",
+                               productividad_usd_ha <= q[1] ~ "Bajo",
+                               TRUE ~ "Intermedio"),
+                     levels = c("Bajo", "Intermedio", "Alto")))
+
+# Formato: coma decimal y sin separador de miles (así Excel en español lee los números)
+num <- function(x, dig = 1) ifelse(is.na(x), "",
+                                   formatC(x, format = "f", digits = dig, decimal.mark = ",", big.mark = ""))
+pv  <- function(p) ifelse(is.na(p), "", ifelse(p < 0.001, "<0,001",
+                                               formatC(p, format = "f", digits = 3, decimal.mark = ",")))
+
+# Una tabla con varios paneles: título, encabezado y filas de cada panel, apilados
+bloque <- function(titulo, df) list(titulo = titulo, df = mutate(df, across(everything(), as.character)))
+
+guardar_tabla <- function(bloques, archivo) {
+  ncol_max <- max(map_int(bloques, ~ ncol(.x$df)))
+  rellenar <- function(v) c(v, rep("", ncol_max - length(v)))
+  filas <- list()
+  for (b in bloques) {
+    filas[[length(filas) + 1]] <- rellenar(b$titulo)
+    filas[[length(filas) + 1]] <- rellenar(names(b$df))
+    for (i in seq_len(nrow(b$df)))
+      filas[[length(filas) + 1]] <- rellenar(unlist(b$df[i, ], use.names = FALSE))
+    filas[[length(filas) + 1]] <- rep("", ncol_max)
+  }
+  m <- do.call(rbind, filas)
+  write_excel_csv2(as.data.frame(m), file.path("resultados/tablas", archivo), col_names = FALSE)
+  for (b in bloques) { cat("\n", b$titulo, "\n"); print(b$df, width = Inf, n = 40) }
+  cat("\nGuardado en resultados/tablas/", archivo, "\n", sep = "")
+}
+
+# ---- Sección 1. Tabla 1 (Objetivo 1): distribución de la productividad, con ANOVA ----
+# Panel A. Provincias de mayor y menor productividad
+top5 <- d %>% arrange(pos_prod)       %>% slice(1:5) %>% mutate(grupo = "Mayor productividad")
+bot5 <- d %>% arrange(desc(pos_prod)) %>% slice(1:5) %>% mutate(grupo = "Menor productividad")
+A1 <- bind_rows(top5, bot5) %>%
+  transmute(Grupo = grupo, `Posición` = pos_prod, Provincia = provincia_nom,
+            `Región` = as.character(region),
+            `Productividad (USD/ha)` = num(productividad_usd_ha, 0),
+            `Índice (mediana = 100)` = num(indice, 0))
+
+# Panel B. Distribución por región natural
+desc_reg <- function(df, etiqueta) {
+  x <- df$productividad_usd_ha
+  tibble(`Región` = etiqueta, n = length(x), Mediana = num(median(x), 0),
+         `Media geométrica` = num(10^mean(log10(x)), 0), `Mínimo` = num(min(x), 0),
+         `Máximo` = num(max(x), 0), `Razón máx/mín` = num(max(x) / min(x), 1),
+         `CV (%)` = num(100 * sd(x) / mean(x), 1),
+         `Provincia mayor` = df$provincia_nom[which.max(x)],
+         `Provincia menor` = df$provincia_nom[which.min(x)])
+}
+B1 <- bind_rows(map(levels(d$region), ~ desc_reg(filter(d, region == .x), .x)),
+                desc_reg(d, "Total"))
+
+# Panel C. ANOVA de un factor: log10 de la productividad según región natural
+m1  <- lm(log10(productividad_usd_ha) ~ region, data = d)
+a1  <- anova(m1)
+sst <- sum(a1$`Sum Sq`)
+C1 <- tibble(
+  Fuente = c("Entre regiones", "Dentro de regiones (residuo)", "Total"),
+  `Suma de cuadrados` = num(c(a1$`Sum Sq`, sst), 3),
+  gl = c(a1$Df, sum(a1$Df)),
+  `Cuadrado medio` = c(num(a1$`Mean Sq`, 3), ""),
+  F = c(num(a1$`F value`[1], 2), "", ""),
+  `p-valor` = c(pv(a1$`Pr(>F)`[1]), "", ""),
+  `η² (proporción explicada)` = c(num(a1$`Sum Sq`[1] / sst, 2), "", ""))
+
+# Panel D. Robustez, supuestos y comparaciones por pares
+welch <- oneway.test(log10(productividad_usd_ha) ~ region, data = d, var.equal = FALSE)
+kw    <- kruskal.test(productividad_usd_ha ~ region, data = d)
+sw    <- shapiro.test(residuals(m1))
+fk    <- fligner.test(log10(productividad_usd_ha) ~ region, data = d)
+tk    <- TukeyHSD(aov(log10(productividad_usd_ha) ~ region, data = d))$region
+
+D1 <- tibble(
+  `Prueba o comparación` = c("ANOVA de Welch (varianzas distintas)",
+                             "Kruskal-Wallis (sin supuesto de normalidad)",
+                             "Shapiro-Wilk de los residuos (normalidad)",
+                             "Fligner-Killeen (igualdad de varianzas)"),
+  Resultado = c(paste0("F = ", num(welch$statistic, 2)), paste0("χ² = ", num(kw$statistic, 2)),
+                paste0("W = ", num(sw$statistic, 3)), paste0("χ² = ", num(fk$statistic, 2))),
+  `p-valor` = pv(c(welch$p.value, kw$p.value, sw$p.value, fk$p.value)),
+  Lectura = c(ifelse(welch$p.value < 0.05, "Hay diferencias entre regiones", "Sin diferencias significativas"),
+              ifelse(kw$p.value < 0.05, "Hay diferencias entre regiones", "Sin diferencias significativas"),
+              ifelse(sw$p.value > 0.05, "Residuos aproximadamente normales", "Se rechaza la normalidad"),
+              ifelse(fk$p.value > 0.05, "Varianzas homogéneas", "Varianzas distintas")))
+D2 <- tibble(
+  `Prueba o comparación` = paste0("Tukey: ", rownames(tk)),
+  Resultado = paste0("razón de medias geométricas = ", num(10^tk[, "diff"], 2),
+                     " (IC 95 %: ", num(10^tk[, "lwr"], 2), " a ", num(10^tk[, "upr"], 2), ")"),
+  `p-valor` = pv(tk[, "p adj"]),
+  Lectura = ifelse(tk[, "p adj"] < 0.05, "Diferencia significativa", "Sin diferencia significativa"))
+D1p <- bind_rows(D1, D2)
+
+guardar_tabla(list(
+  bloque(paste0("Panel A. Provincias de mayor y menor productividad (USD por hectárea cosechada, 2025). Mediana provincial: ",
+                num(med, 0), " USD/ha"), A1),
+  bloque("Panel B. Distribución de la productividad por región natural (USD por hectárea)", B1),
+  bloque("Panel C. ANOVA de un factor: log10 de la productividad según región natural", C1),
+  bloque("Panel D. Supuestos, pruebas de robustez y comparaciones por pares entre regiones", D1p)),
+  "tabla1_objetivo1_distribucion.csv")
+
+# ---- Sección 2. Tabla 2 (Objetivo 2): acceso a riego, crédito y vías ----
+vars2 <- c(riego_pct = "Riego (% de la superficie cosechada)", credito_usd_ha = "Crédito agrícola (USD/ha)",
+           vias_km_100km2 = "Vías, total (km/100 km²)", vias_arterial_km_100km2 = "Vías arteriales (km/100 km²)",
+           vias_colectora_km_100km2 = "Vías colectoras (km/100 km²)")
+
+# Panel A. Estadísticos descriptivos
+A2 <- map_dfr(names(vars2), function(v) {
+  x <- d[[v]]
+  tibble(Indicador = vars2[[v]], n = length(x), Media = num(mean(x), 1), Mediana = num(median(x), 1),
+         DE = num(sd(x), 1), `CV (%)` = num(100 * sd(x) / mean(x), 0),
+         `Mínimo (provincia)` = paste0(num(min(x), 1), " (", d$provincia_nom[which.min(x)], ")"),
+         `Máximo (provincia)` = paste0(num(max(x), 1), " (", d$provincia_nom[which.max(x)], ")"),
+         `Provincias con valor cero` = sum(x == 0))
+})
+
+# Panel B. Medianas por región y prueba de Kruskal-Wallis
+B2 <- map_dfr(names(vars2), function(v) {
+  kw <- kruskal.test(d[[v]] ~ d$region)
+  md <- tapply(d[[v]], d$region, median)
+  tibble(Indicador = vars2[[v]], `Mediana Costa` = num(md[["Costa"]], 1),
+         `Mediana Sierra` = num(md[["Sierra"]], 1), `Mediana Amazonía` = num(md[["Amazonía"]], 1),
+         `Kruskal-Wallis (χ²)` = num(kw$statistic, 2), `p-valor` = pv(kw$p.value))
+})
+
+guardar_tabla(list(
+  bloque("Panel A. Estadísticos descriptivos del acceso a riego, crédito y vías (23 provincias, 2025)", A2),
+  bloque("Panel B. Mediana de cada indicador por región natural y prueba de diferencias entre regiones", B2)),
+  "tabla2_objetivo2_acceso.csv")
+
+# ---- Sección 3. Tabla 3 (Objetivo 3): pobreza rural y escolaridad ----
+vars3 <- c(pobreza_rural_pct = "Pobreza rural (%)", escolaridad_rural_anios = "Escolaridad rural (años)")
+
+# Panel A. Estadísticos descriptivos
+A3 <- map_dfr(names(vars3), function(v) {
+  x <- d[[v]]
+  tibble(Variable = vars3[[v]], n = length(x), Media = num(mean(x), 1), Mediana = num(median(x), 1),
+         DE = num(sd(x), 1), `CV (%)` = num(100 * sd(x) / mean(x), 0),
+         `Mínimo (provincia)` = paste0(num(min(x), 1), " (", d$provincia_nom[which.min(x)], ")"),
+         `Máximo (provincia)` = paste0(num(max(x), 1), " (", d$provincia_nom[which.max(x)], ")"))
+})
+
+# Paneles B y C. Pobreza y escolaridad según grupo (desempeño productivo o región)
+tab_grupo <- function(g) {
+  res <- d %>% mutate(grupo_ = .data[[g]]) %>% group_by(grupo_) %>%
+    summarise(n = n(), prov = paste(provincia_nom[order(-productividad_usd_ha)], collapse = ", "),
+              pm = median(pobreza_rural_pct), pa = mean(pobreza_rural_pct),
+              em = median(escolaridad_rural_anios), ea = mean(escolaridad_rural_anios), .groups = "drop")
+  p_pob <- kruskal.test(d$pobreza_rural_pct ~ d[[g]])$p.value
+  p_esc <- kruskal.test(d$escolaridad_rural_anios ~ d[[g]])$p.value
+  bind_rows(
+    res %>% transmute(Grupo = as.character(grupo_), n = as.character(n), Provincias = prov,
+                      `Pobreza: mediana (%)` = num(pm, 1), `Pobreza: media (%)` = num(pa, 1),
+                      `Escolaridad: mediana (años)` = num(em, 1), `Escolaridad: media (años)` = num(ea, 1)),
+    tibble(Grupo = "Kruskal-Wallis (p-valor)", n = "", Provincias = "",
+           `Pobreza: mediana (%)` = pv(p_pob), `Pobreza: media (%)` = "",
+           `Escolaridad: mediana (años)` = pv(p_esc), `Escolaridad: media (años)` = ""))
+}
+
+guardar_tabla(list(
+  bloque("Panel A. Estadísticos descriptivos de la pobreza y la escolaridad rural (23 provincias, 2025)", A3),
+  bloque("Panel B. Pobreza y escolaridad según el desempeño productivo (Bajo: cuartil inferior; Alto: cuartil superior)",
+         tab_grupo("desempeno")),
+  bloque("Panel C. Pobreza y escolaridad según la región natural", tab_grupo("region"))),
+  "tabla3_objetivo3_contexto.csv")
+
+# ---- Sección 4. Tabla 4 (Objetivo 4): intensidad de la asociación con la productividad ----
+vars4 <- c(riego_pct = "Riego (%)", credito_usd_ha = "Crédito (USD/ha)",
+           vias_km_100km2 = "Vías, total", vias_arterial_km_100km2 = "Vías arteriales",
+           vias_colectora_km_100km2 = "Vías colectoras", pobreza_rural_pct = "Pobreza rural (%)",
+           escolaridad_rural_anios = "Escolaridad rural (años)")
+rol4 <- c(rep("Determinante", 5), rep("Contexto", 2))
+y <- d$productividad_usd_ha
+
+# Correlación de Spearman con intervalo bootstrap (misma semilla que la figura 4)
+set.seed(2025)
+boot_rho <- function(x, y, B = 5000) {
+  r <- replicate(B, { i <- sample(length(x), replace = TRUE)
+  suppressWarnings(cor(x[i], y[i], method = "spearman")) })
+  quantile(r, c(0.025, 0.975), na.rm = TRUE)
+}
+corr <- map_dfr(seq_along(vars4), function(i) {
+  x  <- d[[names(vars4)[i]]]
+  sp <- suppressWarnings(cor.test(x, y, method = "spearman", exact = FALSE))
+  ci <- boot_rho(x, y)
+  xl <- if (names(vars4)[i] == "credito_usd_ha") log10(x) else x
+  tibble(variable = vars4[[i]], rol = rol4[i], rho = unname(sp$estimate),
+         inf = unname(ci[1]), sup = unname(ci[2]), p = sp$p.value,
+         r2 = unname(cor(xl, log10(y)))^2)
+})
+
+# Regresión con variables estandarizadas (log10 de productividad y de crédito)
+dz <- d %>% transmute(
+  y = as.numeric(scale(log10(productividad_usd_ha))), riego = as.numeric(scale(riego_pct)),
+  credito = as.numeric(scale(log10(credito_usd_ha))), arterial = as.numeric(scale(vias_arterial_km_100km2)),
+  colectora = as.numeric(scale(vias_colectora_km_100km2)),
+  pobreza = as.numeric(scale(pobreza_rural_pct)), escolaridad = as.numeric(scale(escolaridad_rural_anios)))
+
+mB <- lm(y ~ riego + credito + arterial + colectora, data = dz)                       # determinantes
+mC <- lm(y ~ riego + credito + arterial + colectora + pobreza + escolaridad, data = dz) # con contexto
+
+etq <- c(riego = "Riego (%)", credito = "Crédito (USD/ha)", arterial = "Vías arteriales",
+         colectora = "Vías colectoras", pobreza = "Pobreza rural (%)", escolaridad = "Escolaridad rural (años)")
+
+vif_fun <- function(m) {
+  X <- model.matrix(m)[, -1, drop = FALSE]
+  sapply(colnames(X), function(v)
+    1 / (1 - summary(lm(X[, v] ~ X[, colnames(X) != v, drop = FALSE]))$r.squared))
+}
+
+cfB <- summary(mB)$coefficients; ciB <- confint(mB); glB <- mB$df.residual; vifB <- vif_fun(mB)
+mod <- tibble(variable = unname(etq[rownames(cfB)[-1]]), beta = cfB[-1, 1],
+              b_inf = ciB[-1, 1], b_sup = ciB[-1, 2], p_b = cfB[-1, 4],
+              r2p = cfB[-1, 3]^2 / (cfB[-1, 3]^2 + glB),
+              vif = unname(vifB[rownames(cfB)[-1]]))
+
+# Estabilidad: coeficientes al quitar una provincia a la vez
+loo <- map_dfr(seq_len(nrow(dz)), function(i) {
+  mi <- lm(formula(mB), data = dz[-i, ])
+  tibble(termino = names(coef(mi))[-1], beta = unname(coef(mi))[-1])
+})
+beta_full <- tibble(termino = names(coef(mB))[-1], beta_full = unname(coef(mB))[-1])
+loo_res <- loo %>% left_join(beta_full, by = "termino") %>% group_by(termino) %>%
+  summarise(b_min = min(beta), b_max = max(beta),
+            cambios = sum(sign(beta) != sign(first(beta_full))), .groups = "drop") %>%
+  mutate(variable = unname(etq[termino]))
+
+tabA <- corr %>%
+  left_join(select(mod, variable, beta, b_inf, b_sup, p_b, r2p, vif), by = "variable") %>%
+  left_join(select(loo_res, variable, b_min, b_max, cambios), by = "variable") %>%
+  mutate(pos_rho  = rank(-abs(rho), ties.method = "min"),
+         pos_beta = rank(-abs(beta), ties.method = "min", na.last = "keep")) %>%
+  arrange(pos_rho)
+
+# Panel A. Asociación de cada variable con la productividad
+A4 <- tabA %>% transmute(
+  Variable = variable, Rol = rol,
+  `ρ de Spearman` = num(rho, 2), `IC 95 % (bootstrap)` = paste0(num(inf, 2), " a ", num(sup, 2)),
+  `p-valor` = pv(p), `R² simple (log)` = num(r2, 2),
+  `Coef. estandarizado` = ifelse(is.na(beta), "—", num(beta, 2)),
+  `IC 95 % del coef.` = ifelse(is.na(beta), "—", paste0(num(b_inf, 2), " a ", num(b_sup, 2))),
+  `p-valor del coef.` = ifelse(is.na(beta), "—", pv(p_b)),
+  `R² parcial` = ifelse(is.na(beta), "—", num(r2p, 2)),
+  VIF = ifelse(is.na(beta), "—", num(vif, 1)),
+  `Rango del coef. sin una provincia` = ifelse(is.na(beta), "—", paste0(num(b_min, 2), " a ", num(b_max, 2))),
+  `Cambios de signo` = ifelse(is.na(beta), "—", as.character(cambios)),
+  `Posición por |ρ|` = pos_rho,
+  `Posición por |coef.|` = ifelse(is.na(pos_beta), "—", as.character(pos_beta)))
+
+# Panel B. Ajuste y diagnóstico del modelo de determinantes
+sB <- summary(mB); cd <- cooks.distance(mB)
+B4 <- tibble(
+  Indicador = c("Provincias (n)", "R²", "R² ajustado", "F (gl)", "p-valor del modelo",
+                "Shapiro-Wilk de los residuos (p)", "Distancia de Cook máxima (provincia)", "VIF máximo"),
+  Valor = c(nobs(mB), num(sB$r.squared, 2), num(sB$adj.r.squared, 2),
+            paste0(num(sB$fstatistic[1], 2), " (", sB$fstatistic[2], "; ", sB$fstatistic[3], ")"),
+            pv(pf(sB$fstatistic[1], sB$fstatistic[2], sB$fstatistic[3], lower.tail = FALSE)),
+            pv(shapiro.test(residuals(mB))$p.value),
+            paste0(num(max(cd), 2), " (", d$provincia_nom[which.max(cd)], ")"),
+            num(max(vifB), 1)))
+
+# Panel C. Modelo ampliado con pobreza y escolaridad
+cfC <- summary(mC)$coefficients; ciC <- confint(mC)
+C4 <- tibble(Variable = unname(etq[rownames(cfC)[-1]]), `Coef. estandarizado` = num(cfC[-1, 1], 2),
+             `IC 95 %` = paste0(num(ciC[-1, 1], 2), " a ", num(ciC[-1, 2], 2)),
+             `p-valor` = pv(cfC[-1, 4])) %>%
+  bind_rows(tibble(Variable = "R² ajustado del modelo ampliado",
+                   `Coef. estandarizado` = num(summary(mC)$adj.r.squared, 2), `IC 95 %` = "", `p-valor` = ""))
+
+guardar_tabla(list(
+  bloque(paste0("Panel A. Asociación de cada variable con la productividad (n = 23). ",
+                "Productividad y crédito en log10; coeficientes en desviaciones estándar"), A4),
+  bloque("Panel B. Ajuste y diagnóstico del modelo de determinantes (riego, crédito, vías arteriales y colectoras)", B4),
+  bloque("Panel C. Modelo ampliado: se añaden pobreza y escolaridad rural como variables de contexto", C4)),
+  "tabla4_objetivo4_asociacion.csv")
+```
